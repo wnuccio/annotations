@@ -18,15 +18,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class ProcessorTest {
 
     @Test
-    void processor_recognizes_an_annotated_class() {
-        Processor processor = new Processor("annotations.classes");
-
-        boolean annotated = processor.isAnnotated(AnnotatedClass.class);
-
-        assertTrue(annotated);
-    }
-
-    @Test
     void processor_returns_only_annotated_classes() {
         Processor processor = new Processor("annotations.classes");
 

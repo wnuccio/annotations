@@ -1,6 +1,6 @@
 package annotations.classes;
 
-import annotations.Annotation;
+import annotations.processor.Annotation;
 
 @Annotation
 public class AnnotatedClassWithDifferentBase {

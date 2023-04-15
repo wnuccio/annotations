@@ -1,7 +1,5 @@
 package annotations.processor;
 
-import annotations.Annotation;
-import annotations.classes.AnnotatedClass;
 import com.google.common.reflect.ClassPath;
 
 import java.io.IOException;
@@ -19,10 +17,8 @@ public class Processor {
         this.packageName = packageName;
     }
 
-    public Set<Class<?>> findAnnotatedClasses() {
-        return findAllClassesInPackage(packageName)
-                .stream().filter(clazz -> clazz.isAnnotationPresent(Annotation.class))
-                .collect(Collectors.toSet());
+    private static boolean isAnnotated(Class<?> aClass) {
+        return aClass.isAnnotationPresent(Annotation.class);
     }
 
     public <T> Optional<T> createAnnotatedClassIfExists(Class<T> superType) {
@@ -39,20 +35,8 @@ public class Processor {
                 .collect(Collectors.toList());
     }
 
-    private <T> T instantiate(Class<?> concreteClass, Class<T> superType) {
-        try {
-            return superType.cast(concreteClass.getDeclaredConstructor().newInstance());
-
-        } catch (IllegalAccessException
-                | NoSuchMethodException
-                | InstantiationException
-                | InvocationTargetException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     @SuppressWarnings("UnstableApiUsage")
-    public Set<Class<?>> findAllClassesInPackage(String packageName) {
+    private Set<Class<?>> findAllClassesInPackage(String packageName) {
         try {
             return ClassPath.from(ClassLoader.getSystemClassLoader())
                     .getAllClasses()
@@ -66,7 +50,22 @@ public class Processor {
         }
     }
 
-    public boolean isAnnotated(Class<AnnotatedClass> aClass) {
-        return aClass.isAnnotationPresent(Annotation.class);
+    public Set<Class<?>> findAnnotatedClasses() {
+        return findAllClassesInPackage(packageName)
+                .stream()
+                .filter(Processor::isAnnotated)
+                .collect(Collectors.toSet());
+    }
+
+    private <T> T instantiate(Class<?> concreteClass, Class<T> superType) {
+        try {
+            return superType.cast(concreteClass.getDeclaredConstructor().newInstance());
+
+        } catch (IllegalAccessException
+                | NoSuchMethodException
+                | InstantiationException
+                | InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
