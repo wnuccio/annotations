@@ -2,14 +2,15 @@ package processor;
 
 import annotations.classes.AnnotatedClass;
 import annotations.classes.BaseType;
+import annotations.classes.NotAnnotatedClass;
 import annotations.processor.Processor;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ProcessorTest {
@@ -32,9 +33,16 @@ class ProcessorTest {
 
     @Test
     void processor_returns_an_instance_of_first_annotated_class() {
-        AnnotatedClass annotatedClass = processor.createAnnotatedClass(AnnotatedClass.class);
+        Optional<AnnotatedClass> annotatedClass = processor.createAnnotatedClassIfExists(AnnotatedClass.class);
 
-        assertNotNull(annotatedClass);
+        assertTrue(annotatedClass.isPresent());
+    }
+
+    @Test
+    void processor_returns_no_instance_if_no_annotated_class_exists() {
+        Optional<NotAnnotatedClass> annotatedClass = processor.createAnnotatedClassIfExists(NotAnnotatedClass.class);
+
+        assertTrue(annotatedClass.isEmpty());
     }
 
     @Test
@@ -43,4 +51,5 @@ class ProcessorTest {
 
         assertEquals(1, annotatedClass.size());
     }
+
 }

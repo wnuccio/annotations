@@ -2,12 +2,12 @@ package annotations.processor;
 
 import annotations.Annotation;
 import annotations.classes.AnnotatedClass;
-import annotations.classes.BaseType;
 import com.google.common.reflect.ClassPath;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -24,18 +24,25 @@ public class Processor {
         return instantiate(clazz, aClass);
     }
 
-    public List<BaseType> createAnnotatedClasses(Class<BaseType> baseTypeClass) {
-        Set<Class<?>> classes = getAnnotatedClasses();
-        return classes
+    public <T> Optional<T> createAnnotatedClassIfExists(Class<T> superType) {
+        return getAnnotatedClasses()
+                .stream()
+                .filter(superType::isAssignableFrom)
+                .map(aClass -> instantiate(aClass, superType))
+                .findFirst();
+    }
+
+    public <T> List<T> createAnnotatedClasses(Class<T> baseTypeClass) {
+        return getAnnotatedClasses()
                 .stream()
                 .map(aClass -> instantiate(aClass, baseTypeClass))
                 .collect(Collectors.toList());
 
     }
 
-    private <T> T instantiate(Class<?> aClass, Class<T> baseTypeClass) {
+    private <T> T instantiate(Class<?> concreteClass, Class<T> superType) {
         try {
-            return baseTypeClass.cast(aClass.getDeclaredConstructor().newInstance());
+            return superType.cast(concreteClass.getDeclaredConstructor().newInstance());
 
         } catch (IllegalAccessException
                 | NoSuchMethodException
