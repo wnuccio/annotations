@@ -3,6 +3,7 @@ package annotations.processor;
 import com.google.common.reflect.ClassPath;
 
 import java.io.IOException;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Optional;
@@ -10,15 +11,16 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Processor {
-
+    private Class<? extends Annotation> annotationClass;
     private String packageName;
 
-    public Processor(String packageName) {
+    public Processor(String packageName, Class<MyAnnotation> annotationClass) {
         this.packageName = packageName;
+        this.annotationClass = annotationClass;
     }
 
-    private static boolean isAnnotated(Class<?> aClass) {
-        return aClass.isAnnotationPresent(Annotation.class);
+    private boolean isAnnotated(Class<?> aClass) {
+        return aClass.isAnnotationPresent(annotationClass);
     }
 
     public <T> Optional<T> createAnnotatedClassIfExists(Class<T> superType) {
@@ -53,7 +55,7 @@ public class Processor {
     public Set<Class<?>> findAnnotatedClasses() {
         return findAllClassesInPackage(packageName)
                 .stream()
-                .filter(Processor::isAnnotated)
+                .filter(this::isAnnotated)
                 .collect(Collectors.toSet());
     }
 

@@ -4,6 +4,7 @@ import annotations.classes.AnnotatedClass;
 import annotations.classes.AnnotatedClassWithDifferentBase;
 import annotations.classes.BaseType;
 import annotations.classes.NotAnnotatedClass;
+import annotations.processor.MyAnnotation;
 import annotations.processor.Processor;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +20,7 @@ class ProcessorTest {
 
     @Test
     void processor_returns_only_annotated_classes() {
-        Processor processor = new Processor("annotations.classes");
+        Processor processor = new Processor("annotations.classes", MyAnnotation.class);
 
         Set<Class<?>> annotatedClasses = processor.findAnnotatedClasses();
 
@@ -33,7 +34,7 @@ class ProcessorTest {
 
     @Test
     void processor_returns_an_instance_of_first_annotated_class() {
-        Processor processor = new Processor("annotations.classes");
+        Processor processor = new Processor("annotations.classes", MyAnnotation.class);
 
         Optional<AnnotatedClass> annotatedClass = processor.createAnnotatedClassIfExists(AnnotatedClass.class);
 
@@ -42,7 +43,7 @@ class ProcessorTest {
 
     @Test
     void processor_returns_no_instance_if_no_annotated_class_exists() {
-        Processor processor = new Processor("annotations.classes");
+        Processor processor = new Processor("annotations.classes", MyAnnotation.class);
 
         Optional<NotAnnotatedClass> annotatedClass = processor.createAnnotatedClassIfExists(NotAnnotatedClass.class);
 
@@ -51,7 +52,7 @@ class ProcessorTest {
 
     @Test
     void processor_returns_an_instance_of_all_annotated_class_with_common_base() {
-        Processor processor = new Processor("annotations.classes");
+        Processor processor = new Processor("annotations.classes", MyAnnotation.class);
 
         List<BaseType> annotatedClass = processor.createAnnotatedClasses(BaseType.class);
 

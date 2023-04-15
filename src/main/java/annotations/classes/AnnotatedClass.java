@@ -1,7 +1,7 @@
 package annotations.classes;
 
-import annotations.processor.Annotation;
+import annotations.processor.MyAnnotation;
 
-@Annotation
+@MyAnnotation
 public class AnnotatedClass implements BaseType {
 }
