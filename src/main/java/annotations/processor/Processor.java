@@ -12,8 +12,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Processor {
-    public Set<Class<?>> getAnnotatedClasses() {
-        return scanAllClassesInPackage("annotations.classes")
+    public Set<Class<?>> findAnnotatedClasses() {
+        return findAllClassesInPackage("annotations.classes")
                 .stream().filter(clazz -> clazz.isAnnotationPresent(Annotation.class))
                 .collect(Collectors.toSet());
     }
@@ -25,7 +25,7 @@ public class Processor {
     }
 
     public <T> List<T> createAnnotatedClasses(Class<T> superType) {
-        return getAnnotatedClasses()
+        return findAnnotatedClasses()
                 .stream()
                 .filter(superType::isAssignableFrom)
                 .map(aClass -> instantiate(aClass, superType))
@@ -45,7 +45,7 @@ public class Processor {
     }
 
     @SuppressWarnings("UnstableApiUsage")
-    public Set<Class<?>> scanAllClassesInPackage(String packageName) {
+    public Set<Class<?>> findAllClassesInPackage(String packageName) {
         try {
             return ClassPath.from(ClassLoader.getSystemClassLoader())
                     .getAllClasses()

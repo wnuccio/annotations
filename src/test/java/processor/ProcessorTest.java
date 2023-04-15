@@ -27,7 +27,7 @@ class ProcessorTest {
 
     @Test
     void processor_returns_only_annotated_classes() {
-        Set<Class<?>> annotatedClasses = processor.getAnnotatedClasses();
+        Set<Class<?>> annotatedClasses = processor.findAnnotatedClasses();
 
         assertEquals(2, annotatedClasses.size());
         Iterator<Class<?>> iterator = annotatedClasses.iterator();
