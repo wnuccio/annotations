@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -21,12 +20,6 @@ public class Processor {
 
     private boolean isAnnotated(Class<?> aClass) {
         return aClass.isAnnotationPresent(annotationClass);
-    }
-
-    public <T> Optional<T> createAnnotatedClassIfExists(Class<T> superType) {
-        return createAnnotatedClasses(superType)
-                .stream()
-                .findFirst();
     }
 
     public <T> List<T> createAnnotatedClasses(Class<T> superType) {
