@@ -17,10 +17,6 @@ public class PackageScanner {
         this.annotationClass = annotationClass;
     }
 
-    private boolean isAnnotated(Class<?> aClass) {
-        return aClass.isAnnotationPresent(annotationClass);
-    }
-
     public Set<?> createAnnotatedClasses() {
         return createAnnotatedClasses(Object.class);
     }
@@ -34,25 +30,23 @@ public class PackageScanner {
     }
 
     @SuppressWarnings("UnstableApiUsage")
-    private Set<Class<?>> findAllClassesInPackage(String packageName) {
-        try {
-            return ClassPath.from(ClassLoader.getSystemClassLoader())
-                    .getAllClasses()
-                    .stream()
-                    .filter(clazz -> clazz.getPackageName().equalsIgnoreCase(packageName))
-                    .map(ClassPath.ClassInfo::load)
-                    .collect(Collectors.toSet());
+    public Set<Class<?>> findAnnotatedClasses() {
+        return classPath()
+                .getAllClasses()
+                .stream()
+                .filter(clazz -> clazz.getPackageName().equalsIgnoreCase(packageName))
+                .map(ClassPath.ClassInfo::load)
+                .filter(this::isAnnotated)
+                .collect(Collectors.toSet());
+    }
 
+    @SuppressWarnings("UnstableApiUsage")
+    private ClassPath classPath() {
+        try {
+            return ClassPath.from(ClassLoader.getSystemClassLoader());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public Set<Class<?>> findAnnotatedClasses() {
-        return findAllClassesInPackage(packageName)
-                .stream()
-                .filter(this::isAnnotated)
-                .collect(Collectors.toSet());
     }
 
     private <T> T instantiate(Class<?> concreteClass, Class<T> superType) {
@@ -65,5 +59,9 @@ public class PackageScanner {
                 | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private boolean isAnnotated(Class<?> aClass) {
+        return aClass.isAnnotationPresent(annotationClass);
     }
 }
