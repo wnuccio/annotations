@@ -8,7 +8,6 @@ import annotations.processor.MyAnnotation;
 import annotations.processor.Processor;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -29,10 +28,19 @@ class ProcessorTest {
     }
 
     @Test
+    void processor_returns_an_instance_of_all_annotated_class() {
+        Processor processor = new Processor("annotations.classes", MyAnnotation.class);
+
+        Set<?> annotatedClass = processor.createAnnotatedClasses();
+
+        assertEquals(3, annotatedClass.size());
+    }
+
+    @Test
     void processor_returns_an_instance_of_all_annotated_class_with_common_base() {
         Processor processor = new Processor("annotations.classes", MyAnnotation.class);
 
-        List<BaseType> annotatedClass = processor.createAnnotatedClasses(BaseType.class);
+        Set<BaseType> annotatedClass = processor.createAnnotatedClasses(BaseType.class);
 
         assertEquals(2, annotatedClass.size());
     }

@@ -5,7 +5,6 @@ import com.google.common.reflect.ClassPath;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -22,12 +21,16 @@ public class Processor {
         return aClass.isAnnotationPresent(annotationClass);
     }
 
-    public <T> List<T> createAnnotatedClasses(Class<T> superType) {
+    public Set<?> createAnnotatedClasses() {
+        return createAnnotatedClasses(Object.class);
+    }
+
+    public <T> Set<T> createAnnotatedClasses(Class<T> superType) {
         return findAnnotatedClasses()
                 .stream()
                 .filter(superType::isAssignableFrom)
                 .map(aClass -> instantiate(aClass, superType))
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
     }
 
     @SuppressWarnings("UnstableApiUsage")
