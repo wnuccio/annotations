@@ -18,12 +18,6 @@ public class Processor {
                 .collect(Collectors.toSet());
     }
 
-    public <T> T createAnnotatedClass(Class<T> aClass) {
-        Set<Class<?>> classes = getAnnotatedClasses();
-        Class<?> clazz = classes.iterator().next();
-        return instantiate(clazz, aClass);
-    }
-
     public <T> Optional<T> createAnnotatedClassIfExists(Class<T> superType) {
         return createAnnotatedClasses(superType)
                 .stream()
