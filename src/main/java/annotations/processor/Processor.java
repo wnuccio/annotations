@@ -12,8 +12,15 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Processor {
+
+    private String packageName;
+
+    public Processor(String packageName) {
+        this.packageName = packageName;
+    }
+
     public Set<Class<?>> findAnnotatedClasses() {
-        return findAllClassesInPackage("annotations.classes")
+        return findAllClassesInPackage(packageName)
                 .stream().filter(clazz -> clazz.isAnnotationPresent(Annotation.class))
                 .collect(Collectors.toSet());
     }
