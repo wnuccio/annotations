@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 public class Processor {
     public Set<Class<?>> getAnnotatedClasses() {
-        return findAllClassesIn("annotations.classes")
+        return scanAllClassesInPackage("annotations.classes")
                 .stream().filter(clazz -> clazz.isAnnotationPresent(Annotation.class))
                 .collect(Collectors.toSet());
     }
@@ -51,7 +51,7 @@ public class Processor {
     }
 
     @SuppressWarnings("UnstableApiUsage")
-    public Set<Class<?>> findAllClassesIn(String packageName) {
+    public Set<Class<?>> scanAllClassesInPackage(String packageName) {
         try {
             return ClassPath.from(ClassLoader.getSystemClassLoader())
                     .getAllClasses()
