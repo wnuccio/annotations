@@ -1,11 +1,13 @@
 package processor;
 
 import annotations.classes.AnnotatedClass;
+import annotations.classes.AnnotatedClassWithDifferentBase;
 import annotations.classes.BaseType;
 import annotations.classes.NotAnnotatedClass;
 import annotations.processor.Processor;
 import org.junit.jupiter.api.Test;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -27,8 +29,12 @@ class ProcessorTest {
     void processor_returns_only_annotated_classes() {
         Set<Class<?>> annotatedClasses = processor.getAnnotatedClasses();
 
-        assertEquals(1, annotatedClasses.size());
-        assertEquals(AnnotatedClass.class, annotatedClasses.iterator().next());
+        assertEquals(2, annotatedClasses.size());
+        Iterator<Class<?>> iterator = annotatedClasses.iterator();
+        Class<?> firstClass = iterator.next();
+        Class<?> secondClass = iterator.next();
+        assertTrue(firstClass.equals(AnnotatedClass.class) || firstClass.equals(AnnotatedClassWithDifferentBase.class));
+        assertTrue(secondClass.equals(AnnotatedClass.class) || secondClass.equals(AnnotatedClassWithDifferentBase.class));
     }
 
     @Test

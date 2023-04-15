@@ -25,19 +25,17 @@ public class Processor {
     }
 
     public <T> Optional<T> createAnnotatedClassIfExists(Class<T> superType) {
+        return createAnnotatedClasses(superType)
+                .stream()
+                .findFirst();
+    }
+
+    public <T> List<T> createAnnotatedClasses(Class<T> superType) {
         return getAnnotatedClasses()
                 .stream()
                 .filter(superType::isAssignableFrom)
                 .map(aClass -> instantiate(aClass, superType))
-                .findFirst();
-    }
-
-    public <T> List<T> createAnnotatedClasses(Class<T> baseTypeClass) {
-        return getAnnotatedClasses()
-                .stream()
-                .map(aClass -> instantiate(aClass, baseTypeClass))
                 .collect(Collectors.toList());
-
     }
 
     private <T> T instantiate(Class<?> concreteClass, Class<T> superType) {
