@@ -5,7 +5,7 @@ import annotations.classes.AnnotatedClass2;
 import annotations.classes.AnnotatedClassWithDifferentBase;
 import annotations.classes.BaseType;
 import annotations.processor.MyAnnotation;
-import annotations.processor.Processor;
+import annotations.processor.PackageScanner;
 import org.junit.jupiter.api.Test;
 
 import java.util.Set;
@@ -13,13 +13,13 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class ProcessorTest {
+class PackageScannerTest {
 
     @Test
-    void processor_returns_only_annotated_classes() {
-        Processor processor = new Processor("annotations.classes", MyAnnotation.class);
+    void scanner_returns_only_annotated_classes() {
+        PackageScanner packageScanner = new PackageScanner("annotations.classes", MyAnnotation.class);
 
-        Set<Class<?>> annotatedClasses = processor.findAnnotatedClasses();
+        Set<Class<?>> annotatedClasses = packageScanner.findAnnotatedClasses();
 
         assertEquals(3, annotatedClasses.size());
         assertTrue(annotatedClasses.contains(AnnotatedClass.class));
@@ -28,19 +28,19 @@ class ProcessorTest {
     }
 
     @Test
-    void processor_returns_an_instance_of_all_annotated_class() {
-        Processor processor = new Processor("annotations.classes", MyAnnotation.class);
+    void scanner_returns_an_instance_of_all_annotated_class() {
+        PackageScanner packageScanner = new PackageScanner("annotations.classes", MyAnnotation.class);
 
-        Set<?> annotatedClass = processor.createAnnotatedClasses();
+        Set<?> annotatedClass = packageScanner.createAnnotatedClasses();
 
         assertEquals(3, annotatedClass.size());
     }
 
     @Test
-    void processor_returns_an_instance_of_all_annotated_class_with_common_base() {
-        Processor processor = new Processor("annotations.classes", MyAnnotation.class);
+    void scanner_returns_an_instance_of_all_annotated_class_with_common_base() {
+        PackageScanner packageScanner = new PackageScanner("annotations.classes", MyAnnotation.class);
 
-        Set<BaseType> annotatedClass = processor.createAnnotatedClasses(BaseType.class);
+        Set<BaseType> annotatedClass = packageScanner.createAnnotatedClasses(BaseType.class);
 
         assertEquals(2, annotatedClass.size());
     }

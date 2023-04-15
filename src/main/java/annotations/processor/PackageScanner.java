@@ -8,11 +8,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class Processor {
+public class PackageScanner {
     private Class<? extends Annotation> annotationClass;
     private String packageName;
 
-    public Processor(String packageName, Class<MyAnnotation> annotationClass) {
+    public PackageScanner(String packageName, Class<MyAnnotation> annotationClass) {
         this.packageName = packageName;
         this.annotationClass = annotationClass;
     }
