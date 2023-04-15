@@ -1,9 +1,11 @@
 package processor;
 
 import annotations.classes.AnnotatedClass;
+import annotations.classes.BaseType;
 import annotations.processor.Processor;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -33,5 +35,12 @@ class ProcessorTest {
         AnnotatedClass annotatedClass = processor.createAnnotatedClass(AnnotatedClass.class);
 
         assertNotNull(annotatedClass);
+    }
+
+    @Test
+    void processor_returns_an_instance_of_all_annotated_class_with_common_base() {
+        List<BaseType> annotatedClass = processor.createAnnotatedClasses(BaseType.class);
+
+        assertEquals(1, annotatedClass.size());
     }
 }

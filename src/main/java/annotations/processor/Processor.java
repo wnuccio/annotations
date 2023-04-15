@@ -2,10 +2,12 @@ package annotations.processor;
 
 import annotations.Annotation;
 import annotations.classes.AnnotatedClass;
+import annotations.classes.BaseType;
 import com.google.common.reflect.ClassPath;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -19,8 +21,21 @@ public class Processor {
     public <T> T createAnnotatedClass(Class<T> aClass) {
         Set<Class<?>> classes = getAnnotatedClasses();
         Class<?> clazz = classes.iterator().next();
+        return instantiate(clazz, aClass);
+    }
+
+    public List<BaseType> createAnnotatedClasses(Class<BaseType> baseTypeClass) {
+        Set<Class<?>> classes = getAnnotatedClasses();
+        return classes
+                .stream()
+                .map(aClass -> instantiate(aClass, baseTypeClass))
+                .collect(Collectors.toList());
+
+    }
+
+    private <T> T instantiate(Class<?> aClass, Class<T> baseTypeClass) {
         try {
-            return (aClass.cast(clazz.getDeclaredConstructor().newInstance()));
+            return baseTypeClass.cast(aClass.getDeclaredConstructor().newInstance());
 
         } catch (IllegalAccessException
                 | NoSuchMethodException

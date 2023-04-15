@@ -3,5 +3,5 @@ package annotations.classes;
 import annotations.Annotation;
 
 @Annotation
-public class AnnotatedClass {
+public class AnnotatedClass implements BaseType {
 }
